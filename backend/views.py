@@ -45,10 +45,12 @@ class ProductInfoView(APIView):
         if category_id:
             query = query = query & Q(product__category_id=category_id)
 
-        queryset = ProductInfo.objects.filter(query).select_related('shop', 'product__categore').prefetch_related(
+        queryset = ProductInfo.objects.filter(
+            query).select_related(
+            'shop', 'product__category').prefetch_related(
             'product_parameters__parameter').distinct()
 
-        serializer = ProductInfoSerializer(quaryset, many=True)
+        serializer = ProductInfoSerializer(queryset, many=True)
 
         return Response(serializer.data)
 
